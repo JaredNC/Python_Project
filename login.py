@@ -1,42 +1,17 @@
 import requests
-#import sys
 
-URL = "https://forums.novociv.org/login.php?do=login"
+# Fill in your details here to be posted to the login form.
+url = "https://forums.novociv.org/login.php?do=login"
+data = {
+    'vb_login_username':'A',
+    'vb_login_password_hint':'Password',
+    'vb_login_password':'',
+    's':'',
+    'securitytoken':'1574248986-ca61a635192e4a54a8edbff241038ff2268b46b1',
+    'do':'login',
+    'vb_login_md5password':'7e9150ec2ee7cd544b719db1ff2cbbef',
+    'vb_login_md5password_utf':'7e9150ec2ee7cd544b719db1ff2cbbef'
+}
 
-def main():
-    session = requests.Session()
-
-    # This is the form data that the page sends when logging in
-    login_data = {
-        'ips_username': '.',
-        'ips_password': '.',
-        'signin_options': 'submit',
-        'redirect':'index.php?'
-    }
-
-    r = session.post(URL, data=login_data)
-
-    # Try accessing a page that requires you to be logged in
-    q = session.get('https://forums.novociv.org/newsearch.php')
-    print(session.cookies)
-    print(r.status_code)
-    print(q.status_code)
-
-    threadid = 0
-    v = session.post('https://forums.novociv.org/newreply.php?do=postreply&t='.join(thread_id), data={
-        'title': '',
-        'message': 'This is posted from python',
-        'wysiwyg': 0,
-        'iconid': 0,
-        'securitytoken': '.',
-        'do': 'postreply',
-        'loggedinuser': 0,
-        'sbutton': 'Submit Reply',
-        'parseurl': 1
-    })
-    print(v.status_code)
-    print(v.text)
-
-
-if __name__ == '__main__':
-    main()
+session = requests.Session()
+r = session.post(url, headers=headers, data=data)
