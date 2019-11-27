@@ -43,8 +43,8 @@ posthash = m.hexdigest()
 print(posthash)
 
 post_data = {
-    'subject': 'Sorry, another test',
-    'message': 'Testing some security',
+    'subject': 'Another one',
+    'message': 'You can delete these threads later',
     's': '',
     'securitytoken': securitytoken,
     'f': '517',
@@ -54,6 +54,8 @@ post_data = {
     'loggedinuser': '1690',
     'sbutton': 'Submit New Thread'
 }
+print(post_data)
+print(headers)
 
 r = session.post('http://forums.novociv.org/newthread.php', headers=headers, data=post_data, verify=False)
 
@@ -61,4 +63,4 @@ print("\nNew URL", r.url)
 print("Status Code:", r.status_code)
 print("History:", r.history)
 
-print(r.text)
+# print(r.text)
