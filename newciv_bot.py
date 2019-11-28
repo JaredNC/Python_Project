@@ -92,3 +92,13 @@ class NewcivLogin:
         print("Status Code:", k.status_code)
         # print(k.text)
         return k
+
+
+# TO DO LIST:
+'''
+    - Make easy page print function that outputs current view.
+    - https://github.com/Damgaard/PyImgur - Make script upload images to imgur and produce bbcode.
+    - Make function for Python_Bot to like a post.
+    - Post a Battle Royale Simulation directly to forum with newciv_bot script.
+    - Grab threadid when making new thread, so bot can reply to his own thread.
+'''
