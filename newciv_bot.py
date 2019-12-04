@@ -13,7 +13,7 @@ class NewcivLogin:
         self.creds = si.SecurityCreds()
         self.salt = self.creds.salt
         self.md5_pass = self.creds.md5_pass
-        self.securitytoken = self.creds.securitytoken
+        # self.securitytoken = self.creds.securitytoken
 
         self.data = {
             'vb_login_username': 'Python_Bot',
@@ -31,7 +31,13 @@ class NewcivLogin:
         print("\nNew URL", self.r.url)
         print("Status Code:", self.r.status_code)
 
-    # Not working
+        response = self.session.get('http://forums.novociv.org/showthread.php?1001177', headers=self.headers, data=None, verify=False)
+        a = response.text.split('form')
+        b = a[1].split('securitytoken" value="')
+        c = b[1].split('"')
+        self.securitytoken = c[0]
+
+        # Not working
     def get_pagetext(self, post):
         print(self.post.text)
 
@@ -63,6 +69,15 @@ class NewcivLogin:
         print("Status Code:", k.status_code)
         # print(k.text)
         return k
+
+    def get_thread_contents(self, thread):
+        response = self.session.get('http://forums.novociv.org/showthread.php?' + str(thread), headers=self.headers, data=None, verify=False)
+        # response = self.session.get('http://forums.novociv.org/showthread.php?'+str(thread)).text
+
+        print("\nNew URL", response.url)
+        print("Status Code:", response.status_code)
+        # print(response.text)
+        return response
 
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt
