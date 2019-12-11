@@ -5,7 +5,7 @@ import sensitive_info as si
 
 class NewcivLogin:
     def __init__(self):
-        self.url = "http://forums.novociv.org/login.php?do=login"
+        self.url = "https://forums.novociv.org/login.php?do=login"
         self.headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36"}
 
         # Grab security credentials from external file.
@@ -31,12 +31,12 @@ class NewcivLogin:
         print("Status Code:", self.r.status_code)
 
     def get_thread_contents(self, thread):
-        response = self.session.get('http://forums.novociv.org/showthread.php?'+str(thread), headers=self.headers, data=None, verify=False)
+        response = self.session.get('https://forums.novociv.org/showthread.php?'+str(thread), headers=self.headers, data=None, verify=False)
         # response = self.session.get('http://forums.novociv.org/showthread.php?'+str(thread)).text
 
         print("\nNew URL", response.url)
         print("Status Code:", response.status_code)
-        # print(response.text)
+        print(response.text)
         return response
 
 
