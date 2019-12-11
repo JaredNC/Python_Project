@@ -25,13 +25,13 @@ class NewcivLogin:
             'vb_login_md5password_utf': self.md5_pass
         }
         self.session = requests.Session()
-        self.r = self.session.post(self.url, headers=self.headers, data=self.data, verify=False)
+        self.r = self.session.post(self.url, headers=self.headers, data=self.data)
 
         print("\nNew URL", self.r.url)
         print("Status Code:", self.r.status_code)
 
     def get_thread_contents(self, thread):
-        response = self.session.get('https://forums.novociv.org/showthread.php?'+str(thread), headers=self.headers, data=None, verify=False)
+        response = self.session.get('https://forums.novociv.org/showthread.php?'+str(thread), headers=self.headers, data=None)
         # response = self.session.get('http://forums.novociv.org/showthread.php?'+str(thread)).text
 
         print("\nNew URL", response.url)

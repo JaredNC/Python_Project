@@ -6,7 +6,7 @@ import sensitive_info as si
 
 class NewcivLogin:
     def __init__(self):
-        self.url = "http://forums.novociv.org/login.php?do=login"
+        self.url = "https://forums.novociv.org/login.php?do=login"
         self.headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36"}
 
         # Grab security credentials from external file.
@@ -26,12 +26,12 @@ class NewcivLogin:
             'vb_login_md5password_utf': self.md5_pass
         }
         self.session = requests.Session()
-        self.r = self.session.post(self.url, headers=self.headers, data=self.data, verify=False)
+        self.r = self.session.post(self.url, headers=self.headers, data=self.data)
 
         print("\nNew URL", self.r.url)
         print("Status Code:", self.r.status_code)
 
-        response = self.session.get('http://forums.novociv.org/showthread.php?1001177', headers=self.headers, data=None, verify=False)
+        response = self.session.get('https://forums.novociv.org/showthread.php?1001177', headers=self.headers, data=None)
         a = response.text.split('form')
         b = a[1].split('securitytoken" value="')
         c = b[1].split('"')
@@ -63,7 +63,7 @@ class NewcivLogin:
             'sbutton': 'Submit New Thread'
         }
 
-        k = self.session.post('http://forums.novociv.org/newthread.php', headers=self.headers, data=post_data, verify=False)
+        k = self.session.post('https://forums.novociv.org/newthread.php', headers=self.headers, data=post_data)
 
         print("\nNew URL", k.url)
         print("Status Code:", k.status_code)
@@ -71,8 +71,8 @@ class NewcivLogin:
         return k
 
     def get_thread_contents(self, thread):
-        response = self.session.get('http://forums.novociv.org/showthread.php?' + str(thread), headers=self.headers, data=None, verify=False)
-        # response = self.session.get('http://forums.novociv.org/showthread.php?'+str(thread)).text
+        response = self.session.get('https://forums.novociv.org/showthread.php?' + str(thread), headers=self.headers, data=None)
+        # response = self.session.get('https://forums.novociv.org/showthread.php?'+str(thread)).text
 
         print("\nNew URL", response.url)
         print("Status Code:", response.status_code)
@@ -101,7 +101,7 @@ class NewcivLogin:
             'loggedinuser': '1690'
         }
 
-        k = self.session.post('http://forums.novociv.org/newreply.php', headers=self.headers, data=post_data, verify=False)
+        k = self.session.post('https://forums.novociv.org/newreply.php', headers=self.headers, data=post_data)
 
         print("\nNew URL", k.url)
         print("Status Code:", k.status_code)
@@ -112,7 +112,6 @@ class NewcivLogin:
 # TO DO LIST:
 '''
     - Make easy page print function that outputs current view.
-    - https://github.com/Damgaard/PyImgur - Make script upload images to imgur and produce bbcode.
     - Make function for Python_Bot to like a post.
     - Post a Battle Royale Simulation directly to forum with newciv_bot script.
     - Grab threadid when making new thread, so bot can reply to his own thread.
