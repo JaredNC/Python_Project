@@ -1,0 +1,13 @@
+/start - Initiates bot. Actually does nothing right now, just a way to flex.
+/suicide - Kills the bot. Very painful to him :(
+/debug - For dev use only
+/caps - Repeats your message in ALLCAPS
+/post - Posts on NewCiv. Follow your message with carrot "^" and the threadid. Example: /post Hi!^101
+/thread - Posts a thread on NewCiv. Follow your title and message with carrot "^" and the forumid. Example: /thread New Thread^Hello World^517
+/hof - Must be used when replying to another message. Posts the replied to message in the HoF thread.
+/photo - Must be used when replying to a photo. Uploads the photo to imgur and gives a link.
+/post_photo - Must be used when replying to a photo, must also contain message and threadid. Example: /post_photo Look at my cat^101
+/quote - Must be used when replying to a message, and have threadid. Quotes the message and includes your response. Example: /quote Such a funny joke^101
+/ask - Just ask anything! Example: /ask who is donald trump?
+/cat - He'll send you a picture of a cat!
+/help - You're already here!

@@ -5,6 +5,10 @@ import newciv_bot as nc
 import pprint
 import time
 import pyimgur
+import google_qry as goog
+from IPython.display import Image
+import requests
+import json
 
 print('test')
 creds = si.SecurityCreds()
@@ -13,6 +17,13 @@ updater = Updater(token=creds.telegram_token, use_context=True)
 dispatcher = updater.dispatcher
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+
+def cat(update, context):
+    caturl = 'http://aws.random.cat/meow'
+    url = json.loads(requests.get(caturl).content)["file"]
+    context.bot.sendPhoto(chat_id=update.effective_chat.id, photo=url)
+    print(url)
 
 
 def start(update, context):
@@ -92,17 +103,45 @@ def post_photo(update, context):
     link = photo(update, context)
     user = update.effective_message.reply_to_message.from_user.first_name
     args = update.message.text.split("^")
-    newpost = "[quote=" + user + "]" + args[0][11:] + "[/quote][img]" + link + "[/img]"
+    newpost = "[quote=" + user + " via Telegram]" + args[0][11:] + "[/quote][img]" + link + "[/img]"
     new = nc.NewcivLogin()
     new.make_newpost(newpost, args[1])
     context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread https://forums.novociv.org/showthread.php?{0}".format(args[1]))
     print("post cmd: " + args[1] + " " + args[0][6:])
 
 
+def quote(update, context):
+    user = update.effective_message.reply_to_message.from_user.first_name
+    user2 = update.effective_message.from_user.first_name
+    msg = update.effective_message.reply_to_message.text
+    args = update.message.text.split("^")
+    new_post = "[quote=" + user + " via Telegram]" + msg + "[/quote]" + user2 + ": " + args[0][7:]
+    new = nc.NewcivLogin()
+    new.make_newpost(new_post, args[1])
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread https://forums.novociv.org/showthread.php?{0}".format(args[1]))
+    print("quote: " + new_post)
+
+
+def ask(update, context):
+    query = update.message.text[5:]
+    response = goog.chatbot_query(query)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+    print("ask: " + query + "\nresponse: " + response)
+
+
+def help(update, context):
+    with open('help.txt', 'r') as file:
+        data = file.read()
+        context.bot.send_message(chat_id=update.effective_chat.id, text=data)
+    print('helped')
+
+
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
 
 
+cat_handler = CommandHandler('cat', cat, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
+dispatcher.add_handler(cat_handler)
 start_handler = CommandHandler('start', start, Filters.chat(creds.chat_id))
 dispatcher.add_handler(start_handler)
 suicide_handler = CommandHandler('suicide', suicide, Filters.chat(creds.chat_id))
@@ -123,6 +162,12 @@ photo_handler = CommandHandler('photo', photo, Filters.user(742801303) | Filters
 dispatcher.add_handler(photo_handler)
 post_photo_handler = CommandHandler('post_photo', post_photo, Filters.user(742801303) | Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
 dispatcher.add_handler(post_photo_handler)
+quote_handler = CommandHandler('quote', quote, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
+dispatcher.add_handler(quote_handler)
+ask_handler = CommandHandler('ask', ask, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
+dispatcher.add_handler(ask_handler)
+help_handler = CommandHandler('help', help)
+dispatcher.add_handler(help_handler)
 unknown_handler = MessageHandler(Filters.command, unknown)
 dispatcher.add_handler(unknown_handler)
 

@@ -2,6 +2,7 @@
 /venv/
 /imgs/
 .idea
+.google-cookie
 *iml
 *pyc
 sensitive_info.py
