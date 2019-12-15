@@ -26,6 +26,13 @@ def cat(update, context):
     print(url)
 
 
+def dog(update, context):
+    dogurl = 'https://dog.ceo/api/breeds/image/random'
+    url = json.loads(requests.get(dogurl).content)["message"]
+    context.bot.sendPhoto(chat_id=update.effective_chat.id, photo=url)
+    print(url)
+
+
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, I'm better than Sexbot!")
     print("start cmd")
@@ -81,7 +88,7 @@ def hof(update, context):
     new_post = user + ": " + msg
     new = nc.NewcivLogin()
     new.make_newpost(new_post, 1054689)
-    context.bot.send_message(chat_id=update.effective_chat.id, text="HoF'd")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="HoF'd", reply_to_message_id=update.effective_message.message_id)
     print("hof: " + new_post)
 
 
@@ -126,7 +133,7 @@ def quote(update, context):
 def ask(update, context):
     query = update.message.text[5:]
     response = goog.chatbot_query(query)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=response, reply_to_message_id=update.effective_message.message_id)
     print("ask: " + query + "\nresponse: " + response)
 
 
@@ -143,6 +150,8 @@ def unknown(update, context):
 
 cat_handler = CommandHandler('cat', cat, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(cat_handler)
+dog_handler = CommandHandler('dog', dog, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+dispatcher.add_handler(dog_handler)
 start_handler = CommandHandler('start', start, Filters.chat(creds.chat_id) | Filters.user(742801303))
 dispatcher.add_handler(start_handler)
 suicide_handler = CommandHandler('suicide', suicide, Filters.user(742801303))
