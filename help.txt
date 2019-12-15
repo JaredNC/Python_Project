@@ -10,4 +10,5 @@
 /quote - Must be used when replying to a message, and have threadid. Quotes the message and includes your response. Example: /quote Such a funny joke^101
 /ask - Just ask anything! Example: /ask who is donald trump?
 /cat - He'll send you a picture of a cat!
+/dog - He'll send you a picture of a dog!
 /help - You're already here!
