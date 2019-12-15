@@ -16,7 +16,7 @@ def chatbot_query(query, index=0):
     result = ''
 
     try:
-        search_result_list = list(search(query, tld="co.in", num=10, stop=3, pause=1))
+        search_result_list = list(search(query+" -site:youtube.com", tld="co.in", num=10, stop=3, pause=1))
 
         # page1 = requests.get(search_result_list[index])
         # page2 = requests.get(search_result_list[index+1])
