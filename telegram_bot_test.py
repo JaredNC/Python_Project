@@ -34,7 +34,8 @@ def start(update, context):
 def suicide(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="ok senpai, i'll die :'(")
     print("stopping")
-    quit()
+    updater.stop()
+    exit()
 
 
 def debug(update, context):
@@ -144,7 +145,7 @@ cat_handler = CommandHandler('cat', cat, Filters.chat(creds.chat_id) | Filters.c
 dispatcher.add_handler(cat_handler)
 start_handler = CommandHandler('start', start, Filters.chat(creds.chat_id))
 dispatcher.add_handler(start_handler)
-suicide_handler = CommandHandler('suicide', suicide, Filters.chat(creds.chat_id))
+suicide_handler = CommandHandler('suicide', suicide, Filters.user(742801303))
 dispatcher.add_handler(suicide_handler)
 debug_handler = CommandHandler('debug', debug, Filters.user(742801303))
 dispatcher.add_handler(debug_handler)
