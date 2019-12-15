@@ -48,12 +48,12 @@ def chatbot_query(query, index=0, tries=5):
 
             if len(chars_without_whitespace) > 0:
                 result = first_sentence + '.'
+                return result
             else:
                 result = ''
                 print('Failed '+str(counter))
                 counter += 1
-
-        return result
+        return fallback
     except:
         if len(result) == 0: result = fallback
         return result
