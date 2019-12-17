@@ -109,9 +109,12 @@ def photo(update, context):
 
 def post_photo(update, context):
     link = photo(update, context)
-    user = update.effective_message.reply_to_message.from_user.first_name
+    user = update.effective_message.from_user.first_name
+    user2 = update.effective_message.reply_to_message.from_user.first_name
     args = update.message.text.split("^")
-    newpost = "[quote=" + user + " via Telegram]" + args[0][11:] + "[/quote][img]" + link + "[/img]"
+    newpost = "[quote=" + user + " via Telegram]" + args[0][11:] + "[/quote]" \
+                                                                   "Image by: " + user2 + \
+                                                                   "\n\n[img]" + link + "[/img]"
     new = nc.NewcivLogin()
     new.make_newpost(newpost, args[1])
     context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread https://forums.novociv.org/showthread.php?{0}".format(args[1]))
