@@ -69,8 +69,8 @@ def caps(update, context):
 def post(update, context):
     args = update.message.text.split("^")
     new = nc.NewcivLogin()
-    new.make_newpost(args[0][6:], args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread https://forums.novociv.org/showthread.php?{0}".format(args[1]))
+    new_p = new.make_newpost(args[0][6:], args[1])
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url))
     print("post cmd: " + args[1] + " " + args[0][6:])
 
 
@@ -116,8 +116,8 @@ def post_photo(update, context):
                                                                    "Image by: " + user2 + \
                                                                    "\n\n[img]" + link + "[/img]"
     new = nc.NewcivLogin()
-    new.make_newpost(newpost, args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread https://forums.novociv.org/showthread.php?{0}".format(args[1]))
+    new_p = new.make_newpost(newpost, args[1])
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url))
     print("post cmd: " + args[1] + " " + args[0][6:])
 
 
@@ -128,8 +128,8 @@ def quote(update, context):
     args = update.message.text.split("^")
     new_post = "[quote=" + user + " via Telegram]" + msg + "[/quote]" + user2 + ": " + args[0][7:]
     new = nc.NewcivLogin()
-    new.make_newpost(new_post, args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread https://forums.novociv.org/showthread.php?{0}".format(args[1]))
+    new_p = new.make_newpost(new_post, args[1])
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url))
     print("quote: " + new_post)
 
 
