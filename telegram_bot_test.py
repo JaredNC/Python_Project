@@ -70,7 +70,7 @@ def post(update, context):
     args = update.message.text.split("^")
     new = nc.NewcivLogin()
     new_p = new.make_newpost(args[0][6:], args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url))
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url), disable_web_page_preview=True)
     print("post cmd: " + args[1] + " " + args[0][6:])
 
 
@@ -78,7 +78,9 @@ def thread(update, context):
     args = update.message.text.split("^")
     new = nc.NewcivLogin()
     new_t = new.make_newthread(args[0][8:], args[1], args[2])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in forum https://forums.novociv.org/forumdisplay.php?{0} thread {1}".format(args[2], new_t.url))
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text="Posted in forum https://forums.novociv.org/forumdisplay.php?{0} thread {1}".format(args[2], new_t.url),
+                             disable_web_page_preview=True)
     print("thread cmd: F- " + args[2] + " T-" + args[0][6:] + " P-" + args[1])
 
 
@@ -117,7 +119,7 @@ def post_photo(update, context):
                                                                    "\n\n[img]" + link + "[/img]"
     new = nc.NewcivLogin()
     new_p = new.make_newpost(newpost, args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url))
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url), disable_web_page_preview=True)
     print("post cmd: " + args[1] + " " + args[0][6:])
 
 
@@ -129,7 +131,7 @@ def quote(update, context):
     new_post = "[quote=" + user + " via Telegram]" + msg + "[/quote]" + user2 + ": " + args[0][7:]
     new = nc.NewcivLogin()
     new_p = new.make_newpost(new_post, args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url))
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url), disable_web_page_preview=True)
     print("quote: " + new_post)
 
 
