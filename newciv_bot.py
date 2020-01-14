@@ -2,6 +2,7 @@ import requests
 import time
 import hashlib
 import sensitive_info as si
+from bs4 import BeautifulSoup
 
 
 class NewcivLogin:
@@ -78,6 +79,25 @@ class NewcivLogin:
         print("Status Code:", response.status_code)
         # print(response.text)
         return response
+
+    def get_post_contents(self, post):
+        response = self.session.get('https://forums.novociv.org/showthread.php?p=' + str(post) + '&viewfull=1#post' +
+                                    str(post), headers=self.headers, data=None)
+        # p1 = response.text.split('<div class="Oldwindowbg2" id="post' + str(post) + '">')[1]
+        # p2 = p1.split('<!-- attachments -->')[0]
+        # p3 = p2.split('member.php?')[1]
+        soup = BeautifulSoup(response.text, 'html.parser')
+        p1 = soup.find(id='post' + str(post))
+        p2 = p1.findNext('div')
+
+        text = dict()
+        t1 = p1.get_text().strip() + ': ' + p2.get_text()
+        text['text'] = t1.rsplit("\n", 6)[0]
+        text['url'] = response.url
+        print("\nNew URL", response.url)
+        print("Status Code:", response.status_code)
+        # print(p3)
+        return text
 
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt

@@ -70,7 +70,9 @@ def post(update, context):
     args = update.message.text.split("^")
     new = nc.NewcivLogin()
     new_p = new.make_newpost(args[0][6:], args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url), disable_web_page_preview=True)
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text="Posted in thread {0}".format(new_p.url),
+                             disable_web_page_preview=True)
     print("post cmd: " + args[1] + " " + args[0][6:])
 
 
@@ -90,7 +92,9 @@ def hof(update, context):
     new_post = user + ": " + msg
     new = nc.NewcivLogin()
     new.make_newpost(new_post, 1054689)
-    context.bot.send_message(chat_id=update.effective_chat.id, text="HoF'd", reply_to_message_id=update.effective_message.message_id)
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text="HoF'd",
+                             reply_to_message_id=update.effective_message.message_id)
     print("hof: " + new_post)
 
 
@@ -105,7 +109,8 @@ def photo(update, context):
     img = photo_file.file_path
     uploaded_image = im.upload_image(url=img, title="title")
     print(uploaded_image.link)
-    context.bot.send_message(chat_id=update.effective_chat.id, text='Gorgeous! ' + uploaded_image.link)
+    context.bot.send_message(chat_id=update.effective_chat.id, text='Gorgeous! ' + uploaded_image.link,
+                             disable_web_page_preview=True)
     return uploaded_image.link
 
 
@@ -119,7 +124,9 @@ def post_photo(update, context):
                                                                    "\n\n[img]" + link + "[/img]"
     new = nc.NewcivLogin()
     new_p = new.make_newpost(newpost, args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url), disable_web_page_preview=True)
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text="Posted in thread {0}".format(new_p.url),
+                             disable_web_page_preview=True)
     print("post cmd: " + args[1] + " " + args[0][6:])
 
 
@@ -131,15 +138,38 @@ def quote(update, context):
     new_post = "[quote=" + user + " via Telegram]" + msg + "[/quote]" + user2 + ": " + args[0][7:]
     new = nc.NewcivLogin()
     new_p = new.make_newpost(new_post, args[1])
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Posted in thread {0}".format(new_p.url), disable_web_page_preview=True)
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text="Posted in thread {0}".format(new_p.url),
+                             disable_web_page_preview=True)
     print("quote: " + new_post)
 
 
 def ask(update, context):
     query = update.message.text[5:]
     response = goog.chatbot_query(query)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=response, reply_to_message_id=update.effective_message.message_id)
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text=response,
+                             reply_to_message_id=update.effective_message.message_id)
     print("ask: " + query + "\nresponse: " + response)
+
+
+def get_post(update, context):
+    query = update.message.text[10:]
+    if query.isdigit():
+        new = nc.NewcivLogin()
+        try:
+            new_p = new.get_post_contents(query)
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text="{0}:\n".format(new_p['url']) +
+                                     new_p['text'],
+                                     disable_web_page_preview=True)
+        except:
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text="Not a valid post number!")
+    else:
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="Not a valid post number!")
+    print("get_post: " + query)
 
 
 def help(update, context):
@@ -153,34 +183,50 @@ def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
 
 
-cat_handler = CommandHandler('cat', cat, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+cat_handler = CommandHandler('cat', cat,
+                             Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(cat_handler)
-dog_handler = CommandHandler('dog', dog, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+dog_handler = CommandHandler('dog', dog,
+                             Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(dog_handler)
-start_handler = CommandHandler('start', start, Filters.chat(creds.chat_id) | Filters.user(742801303))
+start_handler = CommandHandler('start', start,
+                               Filters.chat(creds.chat_id) | Filters.user(742801303))
 dispatcher.add_handler(start_handler)
-suicide_handler = CommandHandler('suicide', suicide, Filters.user(742801303))
+suicide_handler = CommandHandler('suicide', suicide,
+                                 Filters.user(742801303))
 dispatcher.add_handler(suicide_handler)
-debug_handler = CommandHandler('debug', debug, Filters.user(742801303))
+debug_handler = CommandHandler('debug', debug,
+                               Filters.user(742801303))
 dispatcher.add_handler(debug_handler)
-caps_handler = CommandHandler('caps', caps, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+caps_handler = CommandHandler('caps', caps,
+                              Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(caps_handler)
 # echo_handler = MessageHandler(Filters.text, echo, Filters.chat(creds.chat_id) | Filters.user(742801303))
 # dispatcher.add_handler(echo_handler)
-post_handler = CommandHandler('post', post, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+post_handler = CommandHandler('post', post,
+                              Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(post_handler)
-thread_handler = CommandHandler('thread', thread, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+thread_handler = CommandHandler('thread', thread,
+                                Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(thread_handler)
-hof_handler = CommandHandler('hof', hof, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+hof_handler = CommandHandler('hof', hof,
+                             Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(hof_handler)
-photo_handler = CommandHandler('photo', photo, Filters.user(742801303) | Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
+photo_handler = CommandHandler('photo', photo,
+                               Filters.user(742801303) | Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
 dispatcher.add_handler(photo_handler)
-post_photo_handler = CommandHandler('post_photo', post_photo, Filters.user(742801303) | Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
+post_photo_handler = CommandHandler('post_photo', post_photo,
+                                    Filters.user(742801303) | Filters.chat(creds.chat_id) | Filters.chat(-1001406244740))
 dispatcher.add_handler(post_photo_handler)
-quote_handler = CommandHandler('quote', quote, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+quote_handler = CommandHandler('quote', quote,
+                               Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(quote_handler)
-ask_handler = CommandHandler('ask', ask, Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+ask_handler = CommandHandler('ask', ask,
+                             Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(ask_handler)
+get_post_handler = CommandHandler('get_post', get_post,
+                             Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+dispatcher.add_handler(get_post_handler)
 help_handler = CommandHandler('help', help)
 dispatcher.add_handler(help_handler)
 unknown_handler = MessageHandler(Filters.command, unknown)
