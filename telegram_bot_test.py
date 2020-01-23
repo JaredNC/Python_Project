@@ -159,9 +159,10 @@ def get_post(update, context):
         new = nc.NewcivLogin()
         try:
             new_p = new.get_post_contents(query)
+            info = (new_p['text'][:1000] + '..') if len(new_p['text']) > 1002 else new_p['text']
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text="{0}:\n".format(new_p['url']) +
-                                     new_p['text'],
+                                     info,
                                      disable_web_page_preview=True)
         except:
             context.bot.send_message(chat_id=update.effective_chat.id,
