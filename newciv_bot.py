@@ -99,6 +99,21 @@ class NewcivLogin:
         # print(p3)
         return text
 
+    def get_team(self, team_id):
+        response = self.session.get('https://forums.novociv.org/pokemon.php?section=team&do=view_raw&deck=' +
+                                    str(team_id), headers=self.headers, data=None)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        div = soup.find(id='team_dump')
+
+        if div.get_text() == '0':
+            return False
+        else:
+            ps = div.findAll('p')
+            out = []
+            for x in ps:
+                out.append(x.get_text())
+            return out
+
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt
         print(hash_str)
