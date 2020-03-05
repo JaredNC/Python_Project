@@ -112,7 +112,8 @@ class NewcivLogin:
             out = []
             for x in ps:
                 out.append(x.get_text())
-            return out
+            name = soup.find(id='team_owner').get_text()
+            return out, name
 
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt

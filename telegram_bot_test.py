@@ -2,6 +2,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import sensitive_info as si
 import logging
 import newciv_bot as nc
+import battle as bat
 import pprint
 import time
 import pyimgur
@@ -173,6 +174,22 @@ def get_post(update, context):
     print("get_post: " + query)
 
 
+def battle(update, context):
+    args = update.message.text.split("^")
+    try:
+        new_b = bat.BattleBB(args[0][8:], args[1])
+        test, winner = new_b.battle_bb()
+        new = nc.NewcivLogin()
+        new_p = new.make_newpost(test, 1054931)
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text=f"Winner: {winner}. Details Posted in thread {new_p.url}",
+                                 disable_web_page_preview=True)
+    except:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Not a valid team!")
+
+    print("battle cmd: T1- " + args[0][8:] + " T2-" + args[1])
+
+
 def help(update, context):
     with open('help.txt', 'r') as file:
         data = file.read()
@@ -228,6 +245,9 @@ dispatcher.add_handler(ask_handler)
 get_post_handler = CommandHandler('get_post', get_post,
                              Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
 dispatcher.add_handler(get_post_handler)
+battle_handler = CommandHandler('battle', battle,
+                             Filters.chat(creds.chat_id) | Filters.chat(-1001406244740) | Filters.user(742801303))
+dispatcher.add_handler(battle_handler)
 help_handler = CommandHandler('help', help)
 dispatcher.add_handler(help_handler)
 unknown_handler = MessageHandler(Filters.command, unknown)
