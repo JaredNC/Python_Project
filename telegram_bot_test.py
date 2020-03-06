@@ -176,8 +176,11 @@ def get_post(update, context):
 
 def battle(update, context):
     args = update.message.text.split("^")
+    team1 = args[0][8:]
+    team2 = args[1]
+    team1 = 0 if team1 == team2 else team1
     try:
-        new_b = bat.BattleBB(args[0][8:], args[1])
+        new_b = bat.BattleBB(team1, team2)
         test, winner = new_b.battle_bb()
         new = nc.NewcivLogin()
         new_p = new.make_newpost(test, 1054931)
@@ -187,7 +190,7 @@ def battle(update, context):
     except:
         context.bot.send_message(chat_id=update.effective_chat.id, text="Not a valid team!")
 
-    print("battle cmd: T1- " + args[0][8:] + " T2-" + args[1])
+    print(f"battle cmd: T1-{team1} T2-{team2}")
 
 
 def help(update, context):

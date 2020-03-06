@@ -126,6 +126,8 @@ class Battle:
     def __init__(self, team_id1, team_id2):
         self.team_1 = Team(team_id1)
         self.team_2 = Team(team_id2)
+        if team_id1 == team_id2:
+            self.team_1 = 0
 
     def __str__(self) -> str:
         return f"Battle between {self.team_1} and {self.team_2}!"
