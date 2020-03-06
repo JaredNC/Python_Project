@@ -76,7 +76,7 @@ class Pokemon:
         return strength
 
     def calc_defense(self, level, friend):
-        defense = np.floor((level/2) * min((friend/400), 1))
+        defense = np.floor((level/3) * min((friend/400), 1))
         return defense
 
     def remove_hitpoints(self, damage):
@@ -97,7 +97,7 @@ class Fight:
         attacker = self.pokemon_1 if turn == 1 else self.pokemon_2
         defender = self.pokemon_2 if turn == 1 else self.pokemon_1
         multiply = tc.compare(attacker.type, defender.type)
-        attack = max(attacker.strength*multiply - defender.defense, 0)
+        attack = max((attacker.strength - defender.defense)*multiply, 0)
         if random.random() < 0.05:
             critical_str = "[color=orange][b]Critical Hit![/b][/color] "
             attack = np.floor(attack*1.5)
