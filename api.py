@@ -4,7 +4,6 @@ import battle as bat
 import newciv_bot as nc
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
 
 
 @app.route('/', methods=['GET'])
@@ -42,4 +41,5 @@ def api_id():
         return "Failure."
 
 
-app.run()
+if __name__ == '__main__':
+    app.run(debug=True, host="0", port="9999")
