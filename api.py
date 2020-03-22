@@ -55,11 +55,16 @@ def api_id2():
     except:
         return "Problem with team id."
 
+    if int(request.args['thread']) > 0:
+        thread_id = int(request.args['thread'])
+    else:
+        thread_id = 1054931
+
     try:
         new_b = bat.BattleBB(team1, f"Random*{lvl}")
         test, winner = new_b.battle_bb()
         new = nc.NewcivLogin()
-        new_p = new.make_newpost(test, 1054931)
+        new_p = new.make_newpost(test, thread_id)
         print(f"Success! Winner: {winner}")
         return "Success."
     except:
