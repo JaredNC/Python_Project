@@ -59,7 +59,7 @@ class Team:
             min_lvl = max(min_lvl, pokemon.level*.8)
             lvl += pokemon.level
             count += 1
-        return min(min_lvl, round(lvl/count))
+        return max(min_lvl, round(lvl/count))
 
 
 class Pokemon:
