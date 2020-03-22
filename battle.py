@@ -12,10 +12,13 @@ creds = si.SecurityCreds()
 class Team:
     def __init__(self, team_id):
         self.team_id = team_id
-        self.members, self.owner = self.grab_team(self.team_id)
+        self.members, self.owner, self.user_id = self.grab_team(self.team_id)
 
     def __str__(self) -> str:
-        return f"Team {self.team_id} owned by {self.owner}"
+        if str(self.team_id).split("*")[0] == "Random":
+            return f"Random Team owned by {self.owner}"
+        else:
+            return f"Team {self.team_id} owned by {self.owner}"
 
     def __len__(self):
         count = 0
@@ -25,12 +28,12 @@ class Team:
 
     def grab_team(self, team_id):
         new = nc.NewcivLogin()
-        team, name = new.get_team(team_id)
+        team, name, user_id = new.get_team(team_id)
         pokemon = []
         for x in team:
             dump = x.split(',')
             pokemon.append(Pokemon(dump[0], dump[1], int(dump[2]), int(dump[3]), int(dump[4]), dump[5]))
-        return pokemon, name
+        return pokemon, name, user_id
 
     def first_pokemon(self):
         return next((x for x in self.members if x.hitpoints > 0), None)
@@ -38,7 +41,8 @@ class Team:
     def team_pics(self):
         string = []
         for x in self.members:
-            string.append(f"[img]https://forums.novociv.org/pokemon/images/img/{x.monid}.png[/img]")
+            string.append(f"[url=\"https://forums.novociv.org/pokemon.php?section=pokemon&do=view&pokemon={x.monid}\"]"
+                          f"[img]https://forums.novociv.org/pokemon/images/img/{x.monid}.png[/img][/url]")
         return ''.join(string)
 
     def team_members(self):
@@ -46,6 +50,16 @@ class Team:
         for pokemon in self.members:
             string.append(print(pokemon))
         return string
+
+    def analyze(self):
+        lvl = 0
+        min_lvl = 0
+        count = 0
+        for pokemon in self.members:
+            min_lvl = min(min_lvl, pokemon.level*.8)
+            lvl += pokemon.level
+            count += 1
+        return min(min_lvl, round(lvl/count))
 
 
 class Pokemon:

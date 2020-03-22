@@ -100,8 +100,13 @@ class NewcivLogin:
         return text
 
     def get_team(self, team_id):
-        response = self.session.get('https://forums.novociv.org/pokemon.php?section=team&do=view_raw&deck=' +
-                                    str(team_id), headers=self.headers, data=None)
+        if str(team_id).split('*')[0] == "Random":
+            response = self.session.get('https://forums.novociv.org/pokemon.php?section=team&do=view_raw_r&lvl=' +
+                                        team_id.split('*')[1], headers=self.headers, data=None)
+        else:
+            response = self.session.get('https://forums.novociv.org/pokemon.php?section=team&do=view_raw&deck=' +
+                                        str(team_id), headers=self.headers, data=None)
+
         soup = BeautifulSoup(response.text, 'html.parser')
         div = soup.find(id='team_dump')
 
@@ -113,7 +118,8 @@ class NewcivLogin:
             for x in ps:
                 out.append(x.get_text())
             name = soup.find(id='team_owner').get_text()
-            return out, name
+            user_id = soup.find(id='team_owner_id').get_text()
+            return out, name, user_id
 
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt
