@@ -121,6 +121,20 @@ class NewcivLogin:
             user_id = soup.find(id='team_owner_id').get_text()
             return out, name, user_id
 
+    def reward_team(self, team, lvl):
+
+        post_data = {
+            'team': team,
+            'exp': lvl
+        }
+
+        k = self.session.post('https://forums.novociv.org/pokemon.php?section=battle&do=battle', headers=self.headers, data=post_data)
+
+        print("\nNew URL", k.url)
+        print("Status Code:", k.status_code)
+        # print(k.text)
+        return k
+
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt
         print(hash_str)

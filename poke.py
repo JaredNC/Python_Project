@@ -70,12 +70,12 @@ class Bulba:
         return qry
 
 
-def scrape_icons(self):
-    # creds = si.SecurityCreds()
+def scrape_icons(loop):
+    creds = si.SecurityCreds()
 
-    # a = creds.string
+    a = creds.string
 
-    loop = 1
+    loop = loop
 
     claims = a.splitlines()
     for claim in claims:

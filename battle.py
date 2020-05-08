@@ -5,6 +5,17 @@ import newciv_bot as nc
 import sensitive_info as si
 from io import StringIO  # Python 3
 import sys
+import pandas as pd
+
+data = pd.read_csv(r'pokemon.csv')
+df = pd.DataFrame(data, columns=['attack',
+                                 'defense',
+                                 'hp',
+                                 'name',
+                                 'sp_attack',
+                                 'sp_defense',
+                                 'speed',
+                                 'is_legendary'])
 
 creds = si.SecurityCreds()
 
@@ -56,10 +67,14 @@ class Team:
         min_lvl = 0
         count = 0
         for pokemon in self.members:
-            min_lvl = max(min_lvl, pokemon.level*.8)
-            lvl += pokemon.level
+            if pokemon.legendary == 1:
+                min_lvl = max(min_lvl, pokemon.level * 1.6)
+                lvl += pokemon.level * 1.5
+            else:
+                min_lvl = max(min_lvl, pokemon.level*1.2)
+                lvl += pokemon.level*0.75
             count += 1
-        return max(min_lvl, round(lvl/count))
+        return round((min_lvl + lvl/count)*.50)
 
 
 class Pokemon:
@@ -74,6 +89,7 @@ class Pokemon:
         self.friend = friend
         self.indv_item_id = indv_item_id
         self.type = type
+        self.legendary = df['is_legendary'].values[int(self.monid) - 1]
         self.hitpoints = self.calc_hitpoints(self.level)
         self.strength = self.calc_strength(self.level)
         self.defense = self.calc_defense(self.level, self.friend)
@@ -82,16 +98,19 @@ class Pokemon:
         return f"{self.name}: Level {self.level}, Type {self.type}, Hitpoints: {self.hitpoints}"
 
     def calc_hitpoints(self, level):
-        hitpoints = (level*2) + (np.floor(level/10)+1)*2
-        return hitpoints
+        base = df['hp'].values[int(self.monid) - 1]
+        hitpoints = int(base) * (1+level/50) + (np.floor(level/10)+1)*2
+        return np.floor(hitpoints)
 
     def calc_strength(self, level):
-        strength = level
-        return strength
+        base = df['attack'].values[int(self.monid)-1]
+        strength = int(base) * (1+level/50)
+        return np.floor(strength)
 
     def calc_defense(self, level, friend):
-        defense = np.floor((level/3) * min((friend/400), 1))
-        return defense
+        base = df['defense'].values[int(self.monid) - 1]
+        defense = int(base) * (1 + level / 50)
+        return np.floor(defense/2) + np.floor((defense/4) * min((friend/400), 1))
 
     def remove_hitpoints(self, damage):
         self.hitpoints = max(0, self.hitpoints - damage)
@@ -111,7 +130,7 @@ class Fight:
         attacker = self.pokemon_1 if turn == 1 else self.pokemon_2
         defender = self.pokemon_2 if turn == 1 else self.pokemon_1
         multiply = tc.compare(attacker.type, defender.type)
-        attack = max((attacker.strength - defender.defense)*multiply, 0)
+        attack = max((attacker.strength - defender.defense)*multiply, np.floor(attacker.strength*0.25))
         if random.random() < 0.05:
             critical_str = "[color=orange][b]Critical Hit![/b][/color] "
             attack = np.floor(attack*1.5)
