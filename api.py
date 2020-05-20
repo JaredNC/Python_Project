@@ -108,7 +108,9 @@ def api_id3():
                 exp_array.append(round(exp))
 
             new = nc.NewcivLogin()
-            new_r = new.reward_team(winner.team_id, ','.join(map(str, exp_array)))
+            exp_str = ','.join(map(str, exp_array))
+            print(f"Team:{winner.team_id} and exp:{exp_str}")
+            new_r = new.reward_team(winner.team_id, exp_str)
         return "Success."
     except:
         print(f"Failure! Team1: {team1} Team2: {team2}")
