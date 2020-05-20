@@ -73,7 +73,7 @@ def api_id2():
 
 
 @app.route('/api3', methods=['GET'])
-def api_id2():
+def api_id3():
     try:
         if 'id1' in request.args:
             team1 = min(int(request.args['id1']), 5000)
