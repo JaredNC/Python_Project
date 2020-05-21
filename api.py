@@ -97,20 +97,23 @@ def api_id3():
         new = nc.NewcivLogin()
         new_p = new.make_newpost(test, thread_id)
         print(f"Success! Winner: {winner}")
-        if winner.user_id != '15':
-            total = 0
-            for pokemon in winner.members:
-                total += pokemon.level
 
-            exp_array = []
-            for pokemon in winner.members:
-                exp = 5 + pokemon.level / total * lvl
+        total = 0
+        for pokemon in team.members:
+            total += pokemon.level
+
+        exp_array = []
+        for pokemon in team.members:
+            exp = 5 + pokemon.level / total * lvl
+            if winner.user_id != '15':
                 exp_array.append(round(exp))
+            else:
+                exp_array.append(round(exp/2))
 
-            new = nc.NewcivLogin()
-            exp_str = ','.join(map(str, exp_array))
-            print(f"Team:{winner.team_id} and exp:{exp_str}")
-            new_r = new.reward_team(winner.team_id, exp_str)
+        new = nc.NewcivLogin()
+        exp_str = ','.join(map(str, exp_array))
+        print(f"Team:{team.team_id} and exp:{exp_str}")
+        new_r = new.reward_team(team.team_id, exp_str)
         return "Success."
     except:
         print(f"Failure! Team1: {team1} Team2: {team2}")
