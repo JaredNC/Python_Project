@@ -139,6 +139,22 @@ class NewcivLogin:
         # print(k.text)
         return k
 
+    def reward_gym(self, user, gen, badge):
+
+        post_data = {
+            'userid': user,
+            'gen': gen,
+            'badge': badge
+        }
+
+        k = self.session.post('https://forums.novociv.org/pokemon.php?section=battle&do=gym', headers=self.headers,
+                              data=post_data)
+
+        print("\nNew URL", k.url)
+        print("Status Code:", k.status_code)
+        # print(k.text)
+        return k
+
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt
         print(hash_str)

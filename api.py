@@ -171,6 +171,8 @@ def api_id4():
         exp_str = ','.join(map(str, exp_array))
         print(f"Team:{team.team_id} and exp:{exp_str}")
         new_r = new.reward_team(team.team_id, exp_str)
+        if winner.user_id == team.user_id:
+            new_gym = new.reward_gym(team.user_id, gen, badge)
         return "Success."
     except:
         print(f"Failure! Team1: {team1} Team2: {team2}")
