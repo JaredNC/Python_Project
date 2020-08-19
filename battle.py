@@ -28,6 +28,8 @@ class Team:
     def __str__(self) -> str:
         if str(self.team_id).split("*")[0] == "Random":
             return f"Random Team owned by {self.owner}"
+        elif str(self.team_id).split("*")[0] == "Gym":
+            return f"Team owned by Gym Leader {self.owner}"
         else:
             return f"Team {self.team_id} owned by {self.owner}"
 

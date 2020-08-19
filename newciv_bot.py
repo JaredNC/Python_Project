@@ -103,6 +103,10 @@ class NewcivLogin:
         if str(team_id).split('*')[0] == "Random":
             response = self.session.get('https://forums.novociv.org/pokemon.php?section=team&do=view_raw_r&lvl=' +
                                         team_id.split('*')[1], headers=self.headers, data=None)
+        elif str(team_id).split('*')[0] == "Gym":
+            response = self.session.get('https://forums.novociv.org/pokemon.php?section=team&do=view_raw_g&lvl=' +
+                                        team_id.split('*')[1] + '&gen=' + team_id.split('*')[2] + '&gym=' +
+                                        team_id.split('*')[3], headers=self.headers, data=None)
         else:
             response = self.session.get('https://forums.novociv.org/pokemon.php?section=team&do=view_raw&deck=' +
                                         str(team_id), headers=self.headers, data=None)

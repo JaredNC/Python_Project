@@ -1,5 +1,6 @@
 import flask
 from flask import request, jsonify
+import numpy as np
 import battle as bat
 import newciv_bot as nc
 
@@ -93,6 +94,62 @@ def api_id3():
 
     try:
         new_b = bat.BattleBB(team1, f"Random*{lvl}")
+        test, winner = new_b.battle_bb()
+        new = nc.NewcivLogin()
+        new_p = new.make_newpost(test, thread_id)
+        print(f"Success! Winner: {winner}")
+
+        total = 0
+        for pokemon in team.members:
+            total += pokemon.level
+
+        exp_array = []
+        for pokemon in team.members:
+            exp = 5 + pokemon.level / total * lvl
+            if winner.user_id != '15':
+                exp_array.append(round(exp))
+            else:
+                exp_array.append(round(exp/2))
+
+        new = nc.NewcivLogin()
+        exp_str = ','.join(map(str, exp_array))
+        print(f"Team:{team.team_id} and exp:{exp_str}")
+        new_r = new.reward_team(team.team_id, exp_str)
+        return "Success."
+    except:
+        print(f"Failure! Team1: {team1} Team2: {team2}")
+        return "Failure."
+
+
+@app.route('/api4', methods=['GET'])
+def api_id4():
+    try:
+        if 'id1' in request.args:
+            team1 = min(int(request.args['id1']), 5000)
+        else:
+            return "Team 1 invalid."
+
+        team = bat.Team(team1)
+        lvl = team.analyze()
+
+    except:
+        return "Problem with team id."
+
+    if int(request.args['thread']) > 0:
+        thread_id = int(request.args['thread'])
+    else:
+        return "Problem with thread."
+
+    if 'type' in request.args:
+        type = min(int(request.args['type']), 99)
+    else:
+        return "Invalid Gen or Gym."
+
+    gen = np.floor(type / 10)
+    badge = type % 10
+
+    try:
+        new_b = bat.BattleBB(team1, f"Gym*{lvl}*{gen}*{badge}")
         test, winner = new_b.battle_bb()
         new = nc.NewcivLogin()
         new_p = new.make_newpost(test, thread_id)
