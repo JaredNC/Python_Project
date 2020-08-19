@@ -25,7 +25,7 @@ class Type:
                   "Steel": 1, "Fire": 1, "Water": 2, "Grass": 2, "Electric": 0, "Psychic": 1, "Ice": 2, "Dragon": 1, "Dark": 1,
                   "Fairy": 1}
         self.rock = {"Normal": 0.5, "Fighting": 2, "Flying": 0.5, "Poison": 0.5, "Ground": 2, "Rock": 1, "Bug": 1, "Ghost": 1,
-                "Steel": 2, "Fire": 0.5, "Water": 2, "Grass": 0.5, "Electric": 1, "Psychic": 1, "Ice": 1, "Dragon": 1,
+                "Steel": 2, "Fire": 0.5, "Water": 2, "Grass": 2, "Electric": 1, "Psychic": 1, "Ice": 1, "Dragon": 1,
                 "Dark": 1, "Fairy": 1}
         self.bug = {"Normal": 1, "Fighting": 0.5, "Flying": 2, "Poison": 1, "Ground": 0.5, "Rock": 2, "Bug": 1, "Ghost": 1,
                "Steel": 1, "Fire": 2, "Water": 1, "Grass": 0.5, "Electric": 1, "Psychic": 1, "Ice": 1, "Dragon": 1, "Dark": 1,
