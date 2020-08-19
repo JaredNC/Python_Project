@@ -139,12 +139,13 @@ class NewcivLogin:
         # print(k.text)
         return k
 
-    def reward_gym(self, user, gen, badge):
+    def reward_gym(self, user, gen, badge, thread):
 
         post_data = {
             'userid': user,
             'gen': gen,
-            'badge': badge
+            'badge': badge,
+            'thread': thread
         }
 
         k = self.session.post('https://forums.novociv.org/pokemon.php?section=battle&do=gym', headers=self.headers,
