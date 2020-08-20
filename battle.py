@@ -147,10 +147,10 @@ class Fight:
         atk = attacker.strength - defender.defense
         sp_atk = attacker.sp_attack - defender.sp_defense
         if atk > sp_atk:
-            form = 'SP_'
+            form = f"ATK: {attacker.strength} TC:{multiply} DEF: {defender.defense}"
             attack = max(atk * multiply, np.floor(attacker.strength * 0.25 * multiply))
         else:
-            form = ''
+            form = f"SP_ATK: {attacker.sp_attack} TC:{multiply} SP_DEF: {defender.sp_defense}"
             attack = max(sp_atk * multiply, np.floor(attacker.sp_attack * 0.25 * multiply))
 
         if random.random() < 0.05:
@@ -159,7 +159,9 @@ class Fight:
         else:
             critical_str = ""
 
-        print(f"{critical_str}{attacker.name} attacks for {attack}! ({form}ATK: {attacker.strength} TC: {multiply} {form}DEF: {defender.defense})")
+        print(f"{attacker.name} has {attacker.strength} ATK, {attacker.sp_attack} SP_ATK")
+        print(f"{defender.name} has {defender.defense} DEF, {defender.sp_defense} SP_DEF")
+        print(f"{critical_str}{attacker.name} attacks for {attack}! ({form})")
         defender.remove_hitpoints(attack)
         remaining = defender.hitpoints
         print(f"{remaining} hitpoints remaining on {defender.name}!")
