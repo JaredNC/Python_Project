@@ -95,6 +95,8 @@ class Pokemon:
         self.hitpoints = self.calc_hitpoints(self.level)
         self.strength = self.calc_strength(self.level)
         self.defense = self.calc_defense(self.level, self.friend)
+        self.sp_attack = self.calc_sp_attack(self.level)
+        self.sp_defense = self.calc_sp_defense(self.level, self.friend)
 
     def __str__(self) -> str:
         return f"{self.name}: Level {self.level}, Type {self.type}, Hitpoints: {self.hitpoints}"
@@ -111,6 +113,16 @@ class Pokemon:
 
     def calc_defense(self, level, friend):
         base = df['defense'].values[int(self.monid) - 1]
+        defense = int(base) * (1 + level / 50)
+        return np.floor(defense/2) + np.floor((defense/4) * min((friend/400), 1))
+
+    def calc_sp_attack(self, level):
+        base = df['sp_attack'].values[int(self.monid)-1]
+        strength = int(base) * (1+level/50)
+        return np.floor(strength)
+
+    def calc_sp_defense(self, level, friend):
+        base = df['sp_defense'].values[int(self.monid) - 1]
         defense = int(base) * (1 + level / 50)
         return np.floor(defense/2) + np.floor((defense/4) * min((friend/400), 1))
 
@@ -132,14 +144,22 @@ class Fight:
         attacker = self.pokemon_1 if turn == 1 else self.pokemon_2
         defender = self.pokemon_2 if turn == 1 else self.pokemon_1
         multiply = tc.compare(attacker.type, defender.type)
-        attack = max((attacker.strength - defender.defense)*multiply, np.floor(attacker.strength*0.25))
+        atk = attacker.strength - defender.defense
+        sp_atk = attacker.sp_attack - defender.sp_defense
+        if atk > sp_atk:
+            form = 'SP_'
+            attack = max(atk * multiply, np.floor(attacker.strength * 0.25 * multiply))
+        else:
+            form = ''
+            attack = max(sp_atk * multiply, np.floor(attacker.sp_attack * 0.25 * multiply))
+
         if random.random() < 0.05:
             critical_str = "[color=orange][b]Critical Hit![/b][/color] "
             attack = np.floor(attack*1.5)
         else:
             critical_str = ""
 
-        print(f"{critical_str}{attacker.name} attacks for {attack}! (ATK: {attacker.strength} TC: {multiply} DEF: {defender.defense})")
+        print(f"{critical_str}{attacker.name} attacks for {attack}! ({form}ATK: {attacker.strength} TC: {multiply} {form}DEF: {defender.defense})")
         defender.remove_hitpoints(attack)
         remaining = defender.hitpoints
         print(f"{remaining} hitpoints remaining on {defender.name}!")
