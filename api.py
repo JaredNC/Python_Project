@@ -3,6 +3,8 @@ from flask import request, jsonify
 import numpy as np
 import battle as bat
 import newciv_bot as nc
+import sys
+import time
 
 app = flask.Flask(__name__)
 
@@ -123,62 +125,66 @@ def api_id3():
 
 @app.route('/api4', methods=['GET'])
 def api_id4():
-    try:
-        if 'id1' in request.args:
-            team1 = min(int(request.args['id1']), 5000)
-        else:
-            return "Team 1 invalid."
+    timestamp = int(time.time())
+    with open(f"{timestamp}.txt", 'w') as f:
+        sys.stdout = f
 
-        team = bat.Team(team1)
-        lvl = team.analyze()
-
-    except:
-        return "Problem with team id."
-
-    if int(request.args['thread']) > 0:
-        thread_id = int(request.args['thread'])
-    else:
-        return "Problem with thread."
-
-    if 'type' in request.args:
-        type = min(int(request.args['type']), 99)
-    else:
-        return "Invalid Gen or Gym."
-
-    gen = np.floor(type / 10)
-    badge = type % 10
-
-    try:
-        new_b = bat.BattleBB(team1, f"Gym*{lvl}*{gen}*{badge}")
-        test, winner = new_b.battle_bb()
-        new = nc.NewcivLogin()
-        new_p = new.make_newpost(test, thread_id)
-        print(f"Success! Winner: {winner}")
-
-        total = 0
-        for pokemon in team.members:
-            total += pokemon.level
-
-        exp_array = []
-        for pokemon in team.members:
-            exp = 5 + pokemon.level / total * lvl
-            if winner.user_id != '15':
-                exp_array.append(round(exp))
+        try:
+            if 'id1' in request.args:
+                team1 = min(int(request.args['id1']), 5000)
             else:
-                exp_array.append(round(exp/2))
+                return "Team 1 invalid."
 
-        new = nc.NewcivLogin()
-        exp_str = ','.join(map(str, exp_array))
-        print(f"Team:{team.team_id} and exp:{exp_str}")
-        new_r = new.reward_team(team.team_id, exp_str)
-        if winner.user_id == team.user_id:
-            new_gym = new.reward_gym(team.user_id, gen, badge, thread_id)
-            if new_gym != 'Good':
+            team = bat.Team(team1)
+            lvl = team.analyze()
+
+        except:
+            return "Problem with team id."
+
+        if int(request.args['thread']) > 0:
+            thread_id = int(request.args['thread'])
+        else:
+            return "Problem with thread."
+
+        if 'type' in request.args:
+            type = min(int(request.args['type']), 99)
+        else:
+            return "Invalid Gen or Gym."
+
+        gen = np.floor(type / 10)
+        badge = type % 10
+
+        try:
+            new_b = bat.BattleBB(team1, f"Gym*{lvl}*{gen}*{badge}")
+            test, winner = new_b.battle_bb()
+            new = nc.NewcivLogin()
+            new_p = new.make_newpost(test, thread_id)
+            print(f"Success! Winner: {winner}")
+
+            total = 0
+            for pokemon in team.members:
+                total += pokemon.level
+
+            exp_array = []
+            for pokemon in team.members:
+                exp = 5 + pokemon.level / total * lvl
+                if winner.user_id != '15':
+                    exp_array.append(round(exp))
+                else:
+                    exp_array.append(round(exp/2))
+
+            new = nc.NewcivLogin()
+            exp_str = ','.join(map(str, exp_array))
+            print(f"Team:{team.team_id} and exp:{exp_str}")
+            new_r = new.reward_team(team.team_id, exp_str)
+            if winner.user_id == team.user_id:
                 new_gym = new.reward_gym(team.user_id, gen, badge, thread_id)
-        return "Success."
-    except:
-        print(f"Failure! Team1: {team1} Team2: {team2}")
-        return "Failure."
+                if new_gym != 'Good':
+                    new_gym = new.reward_gym(team.user_id, gen, badge, thread_id)
+            return "Success."
+        except:
+            print(f"Failure! Team1: {team1} Team2: {team2}")
+            return "Failure."
 
 if __name__ == '__main__':
     app.run(debug=True, host="0", port="9999")
