@@ -153,9 +153,6 @@ def api_id4():
         test, winner = new_b.battle_bb()
         new = nc.NewcivLogin()
         new_p = new.make_newpost(test, thread_id)
-        while new_p.status_code != 200:
-            new_p = new.make_newpost(test, thread_id)
-
         print(f"Success! Winner: {winner}")
 
         total = 0
@@ -176,9 +173,8 @@ def api_id4():
         new_r = new.reward_team(team.team_id, exp_str)
         if winner.user_id == team.user_id:
             new_gym = new.reward_gym(team.user_id, gen, badge, thread_id)
-            while new_gym.status_code != 200:
+            if new_gym != 'Good':
                 new_gym = new.reward_gym(team.user_id, gen, badge, thread_id)
-
         return "Success."
     except:
         print(f"Failure! Team1: {team1} Team2: {team2}")

@@ -151,10 +151,13 @@ class NewcivLogin:
         k = self.session.post('https://forums.novociv.org/pokemon.php?section=battle&do=gym', headers=self.headers,
                               data=post_data)
 
+        soup = BeautifulSoup(k.text, 'html.parser')
+        result = soup.find(id='gym_result').get_text()
+
         print("\nNew URL", k.url)
         print("Status Code:", k.status_code)
         # print(k.text)
-        return k
+        return result
 
     def make_newpost(self, message, thread):
         hash_str = str(int(time.time()))+'1690'+self.salt
