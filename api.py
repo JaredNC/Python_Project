@@ -126,7 +126,7 @@ def api_id3():
 @app.route('/api4', methods=['GET'])
 def api_id4():
     timestamp = int(time.time())
-    with open(f"{timestamp}.txt", 'w') as f:
+    with open(f"log/{timestamp}.txt", 'w') as f:
         sys.stdout = f
 
         try:
@@ -153,13 +153,14 @@ def api_id4():
 
         gen = np.floor(type / 10)
         badge = type % 10
+        print(f"Gym*{lvl}*{gen}*{badge}", flush=True)
 
         try:
             new_b = bat.BattleBB(team1, f"Gym*{lvl}*{gen}*{badge}")
             test, winner = new_b.battle_bb()
             new = nc.NewcivLogin()
             new_p = new.make_newpost(test, thread_id)
-            print(f"Success! Winner: {winner}")
+            print(f"Success! Winner: {winner}", flush=True)
 
             total = 0
             for pokemon in team.members:
@@ -175,16 +176,18 @@ def api_id4():
 
             new = nc.NewcivLogin()
             exp_str = ','.join(map(str, exp_array))
-            print(f"Team:{team.team_id} and exp:{exp_str}")
+            print(f"Team:{team.team_id} and exp:{exp_str}", flush=True)
             new_r = new.reward_team(team.team_id, exp_str)
             if winner.user_id == team.user_id:
                 new_gym = new.reward_gym(team.user_id, gen, badge, thread_id)
+                print(f"Team:{team.team_id} and result:{new_gym}", flush=True)
                 if new_gym != 'Good':
                     new_gym = new.reward_gym(team.user_id, gen, badge, thread_id)
             return "Success."
         except:
-            print(f"Failure! Team1: {team1} Team2: {team2}")
+            print(f"Failure! Team1: {team1} Team2: Gym*{lvl}*{gen}*{badge}", flush=True)
             return "Failure."
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0", port="9999")
