@@ -71,7 +71,7 @@ def api_id2():
         print(f"Success! Winner: {winner}")
         return "Success."
     except:
-        print(f"Failure! Team1: {team1} Team2: {team2}")
+        print(f"Failure! Team1: {team1} Team2: Random*{lvl}")
         return "Failure."
 
 
@@ -119,7 +119,7 @@ def api_id3():
         new_r = new.reward_team(team.team_id, exp_str)
         return "Success."
     except:
-        print(f"Failure! Team1: {team1} Team2: {team2}")
+        print(f"Failure! Team1: {team1} Team2: Random*{lvl}")
         return "Failure."
 
 

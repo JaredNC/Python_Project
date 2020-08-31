@@ -180,8 +180,8 @@ class Fight:
         alive = True
         stalemate = False
         while alive:
-            if tc.compare(self.pokemon_1.type, self.pokemon_2.type) == 0 & tc.compare(self.pokemon_2.type,
-                                                                                      self.pokemon_1.type) == 0:
+            if int(tc.compare(self.pokemon_1.type, self.pokemon_2.type)) == 0 & int(tc.compare(self.pokemon_2.type,
+                                                                                      self.pokemon_1.type)) == 0:
                 stalemate = True
             turn += 1
             alive = self.attack(turn % 2, stalemate)
