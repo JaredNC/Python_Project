@@ -140,7 +140,7 @@ class Fight:
         self.pokemon_1 = pokemon_1
         self.pokemon_2 = pokemon_2
 
-    def attack(self, turn):
+    def attack(self, turn, stalemate=False):
         attacker = self.pokemon_1 if turn == 1 else self.pokemon_2
         defender = self.pokemon_2 if turn == 1 else self.pokemon_1
         multiply = tc.compare(attacker.type, defender.type)
@@ -159,23 +159,32 @@ class Fight:
         else:
             critical_str = ""
 
+        if(stalemate):
+            print(f"{attacker.name} struggles!")
+            attack = atk
+            form = f"ATK: {attacker.strength} TC:1 DEF: {defender.defense}"
+
         print(f"{attacker.name} has {attacker.strength} ATK, {attacker.sp_attack} SP_ATK")
         print(f"{defender.name} has {defender.defense} DEF, {defender.sp_defense} SP_DEF")
         print(f"{critical_str}{attacker.name} attacks for {attack}! ({form})")
         defender.remove_hitpoints(attack)
         remaining = defender.hitpoints
-        print(f"{remaining} hitpoints remaining on {defender.name}!")
+        print(f"{remaining} hitpoints remaining on {defender.name}!\n")
         if remaining > 0:
             return True
         else:
-            print(f"[color=red][b]{defender.name} fainted![/b][/color]\n")
+            print(f"[color=red][b]{defender.name} fainted![/b][/color]\n\n")
             return False
 
     def fight(self, turn=0):
         alive = True
+        stalemate = False
         while alive:
+            if tc.compare(self.pokemon_1.type, self.pokemon_2.type) == 0 & tc.compare(self.pokemon_2.type,
+                                                                                      self.pokemon_1.type) == 0:
+                stalemate = True
             turn += 1
-            alive = self.attack(turn % 2)
+            alive = self.attack(turn % 2, stalemate)
         return turn % 2
 
 

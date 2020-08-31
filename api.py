@@ -128,6 +128,7 @@ def api_id4():
     timestamp = int(time.time())
     with open(f"log/{timestamp}.txt", 'w') as f:
         sys.stdout = f
+        print("hello", flush=True)
 
         try:
             if 'id1' in request.args:
